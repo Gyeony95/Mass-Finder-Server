@@ -125,7 +125,7 @@ REST_FRAMEWORK = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/seoul'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
