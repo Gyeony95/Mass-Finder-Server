@@ -23,16 +23,18 @@ def calc_mass(request):
     logging.basicConfig(level=logging.DEBUG)  # 모든 DEBUG 이상의 로그를 캡처
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))  # request.body는 bytes형태이므로 decode 필요
+        logging.debug("Received data: %s", data)
         total_weight = data.get('totalWeight')  # float
         init_amino = data.get('initAmino')  # string
         current_formy_type = data.get('currentFormyType')  # string
         current_ion_type = data.get('currentIonType')  # string
         input_aminos = data.get('inputAminos')  # dict
-
-        result = calc_by_ion_type(total_weight, init_amino, current_formy_type, current_ion_type, input_aminos)
-        logging.debug(f'ghghgh {result}')
-        logging.debug(
-            f"total_weight : {total_weight}, init_amino : {init_amino}, current_formy_type : {current_formy_type}, current_ion_type : {current_ion_type}, input_aminos : {input_aminos}")
+        try:
+            result = calc_by_ion_type(total_weight, init_amino, current_formy_type, current_ion_type, input_aminos)
+        except Exception as e:
+            logging.error("Error processing data: %s", e)
+            return JsonResponse({"resultCode": 500, "resultMessage": "Internal server error"}, status=500)
+        # result = calc_by_ion_type(total_weight, init_amino, current_formy_type, current_ion_type, input_aminos)
 
         response = {
             "resultCode": 200,
