@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
+
+from mass_finder_app.logic.amino_calc import calc, calc_by_ion_type
 from mass_finder_app.models import Test, AminoData
 from mass_finder_app.serializers import TestSerializers
 from django.http import JsonResponse
@@ -26,11 +28,16 @@ def calc_mass(request):
         current_formy_type = data.get('currentFormyType')  # string
         current_ion_type = data.get('currentIonType')  # string
         input_aminos = data.get('inputAminos')  # dict
+
+        result = calc_by_ion_type(total_weight, init_amino, current_formy_type, current_ion_type, input_aminos)
+        logging.debug(f'ghghgh {result}')
         logging.debug(
             f"total_weight : {total_weight}, init_amino : {init_amino}, current_formy_type : {current_formy_type}, current_ion_type : {current_ion_type}, input_aminos : {input_aminos}")
-        # if user is not None:
-        #     return JsonResponse({'email': user.email}, status=200)
-        # else:
-        #     return JsonResponse({'error': 'Invalid credentials'}, status=400)
-    # return JsonResponse({'error': 'Invalid request'}, status=400)
-    return JsonResponse({'success': 'calc compleate : '}, status=200)
+
+        response = {
+            "resultCode": 200,
+            "resultMessage": "정상적으로 처리되었습니다.",
+            "data": result,
+        }
+
+    return JsonResponse(response, status=200)
