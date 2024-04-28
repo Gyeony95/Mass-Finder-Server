@@ -96,8 +96,9 @@ def calc_by_ftype(f_type, target_mass):
         elif f_type == FormyType.UNKNOWN:
             solution1 = simulated_annealing(target_mass)
             solution2 = simulated_annealing(target_mass - f_weight)
+            solution2 = {f'f{list(solution2.keys())[0]}': list(solution2.values())[0]}
             key1 = list(solution1.keys())[0]
-            key2 = f'f{list(solution2.keys())[0]}'
+            key2 = list(solution2.keys())[0]
             best_solutions.append(AminoModel(code=key1, weight=get_weight_sum(key1)))
             best_solutions.append(AminoModel(code=key2, weight=get_weight_sum(key2)))
 
@@ -228,7 +229,7 @@ def get_min_max_range(type, target_mass):
     if min_range is None or max_range is None:  # 초기화되지 않은 경우 처리
         raise ValueError("min or max is not properly initialized")
 
-    return Range(min_range, max_range)
+    return range(min_range, max_range)
 
 
 def get_init_amino_weight(init_amino):
